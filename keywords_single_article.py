@@ -7,7 +7,7 @@ input format: "title", file_name.txt
 import csv, sys, re, string
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import coo_matrix
 
 def sort_coo(coo_matrix):
@@ -51,20 +51,14 @@ cleanText.append(text)
 
 #vectorize words
 # print("vectorizing words")
-cv=CountVectorizer(max_df=1,stop_words=list(stopWords), max_features=10000, ngram_range=(1,3))
+cv=TfidfVectorizer(max_df=1,stop_words=list(stopWords), max_features=10000, ngram_range=(1,3))
 # print("fitting to model")
 X=cv.fit_transform(cleanText)
 
 #tf-idf calculation
-# print("transform tfidf to model")
-tfidf_transformer=TfidfTransformer(smooth_idf=True,use_idf=True)
-# print("fit model to tfidf values")
-tfidf_transformer.fit(X)
 # print("getting feature names")
 feature_names=cv.get_feature_names()
-#tf-idf convert to keywords ranking
-
-tf_idf_vector=tfidf_transformer.transform(cv.transform([cleanText[0]]))
+tf_idf_vector=cv.transform([cleanText[0]])
 sorted_items=sort_coo(tf_idf_vector.tocoo())
 keywords=extract_results(feature_names,sorted_items)
 
