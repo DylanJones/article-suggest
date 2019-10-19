@@ -76,7 +76,7 @@ count = 0
 for tfidf_calc in cleanText:
     print(count)
     count +=1
-    sorted_items=sort_coo(X.transform([tfidf_calc]).tocoo())
+    sorted_items=sort_coo(cv.transform([tfidf_calc]).tocoo())
     keywords=extract_results(feature_names,sorted_items)
     tfidf_lists.append(keywords)
 
