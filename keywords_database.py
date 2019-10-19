@@ -1,7 +1,7 @@
 import csv, sys, re, string,json
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import coo_matrix
 
 def sort_coo(coo_matrix):
@@ -64,15 +64,10 @@ for i, item in enumerate(textList):
 
 #vectorize words
 print("vectorizing words")
-cv=CountVectorizer(max_df=0.85,stop_words=list(stopWords), max_features=10000, ngram_range=(1,3))
+cv=TfidfVectorizer(max_df=0.85,stop_words=list(stopWords), ngram_range=(1,3))
 print("fitting to model")
 X=cv.fit_transform(cleanText)
 
-#tf-idf calculation
-print("transform tfidf to model")
-tfidf_transformer=TfidfTransformer(smooth_idf=True,use_idf=True)
-print("fit model to tfidf values")
-tfidf_transformer.fit(X)
 print("getting feature names")
 feature_names=cv.get_feature_names()
 tfidf_lists = []
@@ -80,9 +75,8 @@ count = 0
 #tf-idf convert to keywords ranking
 for tfidf_calc in cleanText:
     print(count)
-    count += 1
-    tf_idf_vector=tfidf_transformer.transform(cv.transform([tfidf_calc]))
-    sorted_items=sort_coo(tf_idf_vector.tocoo())
+    count +=1
+    sorted_items=sort_coo(X.transform([tfidf_calc]).tocoo())
     keywords=extract_results(feature_names,sorted_items)
     tfidf_lists.append(keywords)
 
