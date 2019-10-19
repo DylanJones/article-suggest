@@ -29,14 +29,24 @@ from nltk.corpus import stopwords
 stopWords = set(stopwords.words('english'))
 
 #read the news articles and titles from dataset
-csvfile = open("all-the-news/articles1.csv")
-myText = csv.reader(csvfile)
+csvfile1 = open("all-the-news/articles1.csv")
+csvfile2 = open("all-the-news/articles2.csv")
+csvfile3 = open("all-the-news/articles3.csv")
+myText1 = csv.reader(csvfile1)
+myText2 = csv.reader(csvfile2)
+myText3 = csv.reader(csvfile3)
 csv.field_size_limit(sys.maxsize)
 titles = []
 textList = []
-for item in myText:
+for item in myText1:
     titles.append(item[2])
     textList.append(item[9].lower())
+for item2 in myText2:
+    titles.append(item2[2])
+    textList.append(item2[9].lower())
+for item3 in myText3:
+    titles.append(item3[2])
+    textList.append(item3[9].lower())
 # print(len(textList))
 textList.pop(0)
 titles.pop(0)
@@ -76,9 +86,9 @@ for tfidf_calc in cleanText:
     keywords=extract_results(feature_names,sorted_items)
     tfidf_lists.append(keywords)
 
-titles_file = open("title.txt", "w")
+titles_file = open("all-title.txt", "w")
 #article_file = open("article.txt", "w")
-results_file = open("keywords.txt", "w")
+results_file = open("all-keywords.txt", "w")
 
 #save to file
 #for q in range(len(titles)):
