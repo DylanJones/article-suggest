@@ -1,4 +1,4 @@
-import gensim.downloader as api
+#import gensim.downloader as api
 import json
 import random
 #input: model, keywords associated with article titles, keywords for current article
