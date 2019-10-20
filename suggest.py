@@ -1,4 +1,4 @@
-#import gensim.downloader as api
+import gensim.downloader as api
 import json
 import random
 #input: model, keywords associated with article titles, keywords for current article
@@ -6,10 +6,10 @@ import random
 #largest & betw two sets (curr article keywords & curr element in database)
 
 NUM_WORDS = 10 #the top keywords from each article to compare against each other
-with open("keywords.txt", "r") as read_file:
+with open("all-keywords.txt", "r") as read_file:
     keywords = json.load(read_file)
 
-with open("title.txt", "r") as read_file2:
+with open("all-title.txt", "r") as read_file2:
     titles = json.load(read_file2)
 
 og_index = random.randint(0, len(titles))
