@@ -11,17 +11,18 @@ function submitURL() {
              //response should be the urls to display
              var result = JSON.parse(response);
              var div = document.getElementById("links");
-            for(var hyperlink of result)
-            {
-              var a = document.createElement('a');
-              a.setAttribute('href',hyperlink);
-              a.innerHTML = "Suggested Article";
-              // apend the anchor to the body
-              // of course you can append it almost to any other dom element
-              div.appendChild(a);
-              div.appendChild(document.createElement('br'));
 
-            }//console.log(result);
+             var i;
+             for(var i = 0; i < result.length; i++)
+             {
+               var a = document.createElement('a');
+
+                 a.setAttribute('href','https://google.com?q='+result[i])
+               a.innerHTML = result[i];
+
+               div.appendChild(a);
+               div.appendChild(document.createElement('br'));
+             }
          }
      });
    }

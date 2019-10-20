@@ -8,8 +8,9 @@ articletext = sys.argv[1]
 
 #print("output: "+articletext)
 
-print("https://gmu.edu")
-print("https://google.com")
+print("Mulvaney faced White House ouster threat before impeachment crisis took over")
+print('Frantic search for survivors after deadly Siberian dam collapse')
+print('Pompeo feels frustrated and victimized amid impeachment controversy')
 #sys.stdout.write("aaaahh");# our python operation
 #out = "The reversed version of {} is {}, courtesy of python!!".format(input_json, reversed_string)
 
