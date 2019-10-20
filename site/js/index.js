@@ -9,7 +9,9 @@ function submitText() {
          success: function(response) {
              // the function we are in is called when the server responds with data
              //response should be the urls to display
-             console.log(response);
+             //var result = JSON.parse(response);
+             document.getElementById('label').innerHTML = "a";
+             //console.log(result);
          }
      });
    }
@@ -23,7 +25,9 @@ function submitURL() {
          success: function(response) {
              // the function we are in is called when the server responds with data
              //response should be the urls to display
-             console.log(response);
+             //var result = JSON.parse(response);
+             document.getElementById('label').innerHTML = "a";
+             //console.log(result);
          }
      });
    }

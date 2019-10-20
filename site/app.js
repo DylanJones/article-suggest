@@ -1,9 +1,14 @@
 var express = require('express');
 var path = require('path');
 var request = require('request');
-var child_process = require('child_process')
+var child_process = require('child_process');
+var fs = require('fs');
+let {PythonShell} = require('python-shell');
 
 var app = express();
+
+
+
 app.set('port',process.env.PORT||8080);
 app.use('/views',express.static(path.join(__dirname,"views")));
 app.use('/css',express.static(path.join(__dirname,"css")));
@@ -23,46 +28,59 @@ app.get('/url', function (req, res) {
   res.render('url');
 })
 app.get('/fileupload',function(req,res){
-  console.log(req.query.fileupload);
-  res.render('index')
+  var file = req.query.fileupload;
+  fs.readFile(file, function(err, buf) {
+  console.log(buf.toString());
+});
+  console.log(file);
+  // const filecontents = fs.readFileSync(fileupload).toString();
+  // console.log(filecontents);
+
+
+
+//  res.render('index')
 })
 app.get('/textupload',function(req,res){
   console.log(req.query.data)
-  // var articletext = req.query.data;
-  // // the python executable. Can be a path to a venv
-  // python_exe = 'python3';
-  //
-  // // the python file
-  // pythonFile = path.join(__dirname, 'python', 'py_script_01.py');
-  //
-  // //produce json data for python input
-  // jsonData = JSON.stringify(articletext);
-  // feed_dict = { input: jsonData };
-  //
-  // // spawn the (python) child process
-  // py = child_process.spawnSync(python_exe, [pythonFile], feed_dict );
-  //
-  // // extract the result of the python operation
-  // py_response = py['stdout'].toString();
-  // console.log(py_response);
-  // // send the result back to the user
-  // res.send(py_response);
-
+  var articletext = req.query.data;
+  let options = {
+    mode: 'text',
+    pythonOptions: ['-u'], // get print results in real-time
+    scriptPath: path.join(__dirname, 'python'),
+    args: [articletext]
+  };
+  PythonShell.run('py_script_01.py', options, function (err, results) {
+    if (err) throw err;
+    // results is an array consisting of messages collected during execution
+    //console.log('results: %j', results);
+    var result_json = JSON.stringify(results);
+    console.log(result_json);
+    res.send(result_json); //sends output of python to client side to display urls on site
+  });
 })
+
 app.get('/urlupload',function(req,res){
   var url = req.query.data;
-  var article = "";
-  console.log(req.query.data)
-
-
+  //console.log(req.query.data)
      request("http://boilerpipe-web.appspot.com/extract?extractor=ArticleExtractor&output=text&url="+url, function (error, response, body) {
        if (!error && response.statusCode == 200) {
-         console.log(body) // Print the google web page.
-         article = body
+         //console.log(body) // Print the google web page.
+         var articletext = body;
+         let options = {
+           mode: 'text',
+           pythonOptions: ['-u'], // get print results in real-time
+           scriptPath: path.join(__dirname, 'python'),
+           args: [articletext]
+         };
+         PythonShell.run('py_script_01.py', options, function (err, results) {
+           if (err) throw err;
+           // results is an array consisting of messages collected during execution
+           var result_json = JSON.stringify(results);
+           console.log(result_json);
+           res.send(result_json); //sends output of python to client side to display urls on site
+         });
        }
      })
-
-
 
 })
 var listener = app.listen(app.get('port'), function(){
