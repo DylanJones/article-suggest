@@ -1,6 +1,5 @@
 '''
 input format: "title", file_name.txt
-
 '''
 
 
@@ -30,55 +29,41 @@ def extract_results(feature_names, sorted_items):
     return results
 
 
-#get english stopwords from nltk
-from nltk.corpus import stopwords
-stopWords = set(stopwords.words('english'))
+def get_keywords(title, text):
+    #get english stopwords from nltk
+    from nltk.corpus import stopwords
+    stopWords = set(stopwords.words('english'))
 
-#read the news articles and titles from dataset
-title, file_ = input().split(", ")
-f = open(file_)
-textList = [f.read()]
-titles = [title]
+    #read the news articles and titles from dataset
+    textList = [text]
+    titles = [title]
 
-#remove all unnecessary words from dataset
-pattern = re.compile('[^a-z A-Z]')
-cleanText = []
-textList[0] = pattern.sub('', textList[0])
-lem = WordNetLemmatizer()
-text = [lem.lemmatize(word) for word in textList[0].split() if word not in stopWords]
-text = " ".join(text)
-cleanText.append(text)
+    #remove all unnecessary words from dataset
+    pattern = re.compile('[^a-z A-Z]')
+    cleanText = []
+    textList[0] = pattern.sub('', textList[0])
+    lem = WordNetLemmatizer()
+    text = [lem.lemmatize(word) for word in textList[0].split() if word not in stopWords]
+    text = " ".join(text)
+    cleanText.append(text)
 
-#vectorize words
-# print("vectorizing words")
-cv=CountVectorizer(max_df=1,stop_words=list(stopWords), max_features=10000, ngram_range=(1,3))
-# print("fitting to model")
-X=cv.fit_transform(cleanText)
+    #vectorize words
+    # print("vectorizing words")
+    cv=CountVectorizer(max_df=1,stop_words=list(stopWords), max_features=10000, ngram_range=(1,3))
+    # print("fitting to model")
+    X=cv.fit_transform(cleanText)
 
-#tf-idf calculation
-# print("transform tfidf to model")
-tfidf_transformer=TfidfTransformer(smooth_idf=True,use_idf=True)
-# print("fit model to tfidf values")
-tfidf_transformer.fit(X)
-# print("getting feature names")
-feature_names=cv.get_feature_names()
-#tf-idf convert to keywords ranking
+    #tf-idf calculation
+    # print("transform tfidf to model")
+    tfidf_transformer=TfidfTransformer(smooth_idf=True,use_idf=True)
+    # print("fit model to tfidf values")
+    tfidf_transformer.fit(X)
+    # print("getting feature names")
+    feature_names=cv.get_feature_names()
 
-tf_idf_vector=tfidf_transformer.transform(cv.transform([cleanText[0]]))
-sorted_items=sort_coo(tf_idf_vector.tocoo())
-keywords=extract_results(feature_names,sorted_items)
+    #tf-idf convert to keywords ranking
+    tf_idf_vector=tfidf_transformer.transform(cv.transform([cleanText[0]]))
+    sorted_items=sort_coo(tf_idf_vector.tocoo())
+    keywords=extract_results(feature_names,sorted_items)
 
-# titles_file = open("title.txt", "w")
-# #article_file = open("article.txt", "w")
-# results_file = open("keywords.txt", "w")
-
-# #save to file
-# for q in range(len(titles)):
-#     titles_file.write(titles[q])
-#     #article_file.write(cleanText[q])
-#     results_file.write(tfidf_lists[q])
-
-# print("len(titles)", len(titles))
-# print("len(cleanText)", len(cleanText))
-# print("len(tfidf_lists)", len(tfidf_lists))
-print(keywords)
+    return keywords
