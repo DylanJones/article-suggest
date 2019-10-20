@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+    <style>
+    .spaced{
+      margin-bottom: 15px
+    }
+    .scrollabletextbox {
+        height:200px;
+        width:80%;
+        font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+        font-size: 82%;
+        overflow:scroll;
+    }
+    </style>
+  </head>
+  <body>
+    <div class ="page-header text-center">
+      <h1>Enter Article Text Below</h1>
+    </div>
+    <div class='center-block spaced'>
+      <textarea id="textinput" class='scrollabletextbox center-block spaced'></textarea>
+      <button id = "textbutton" class="center-block btn btn-primary btn-large" onclick="submitText()">Submit</button>
+    </div>
+  </body>
+</html>
